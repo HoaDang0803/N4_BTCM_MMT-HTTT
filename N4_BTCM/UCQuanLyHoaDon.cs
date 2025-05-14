@@ -254,9 +254,59 @@ namespace N4_BTCM
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Chức năng 'Lưu Hóa đơn' đang được phát triển");
-            // Logic: Lưu thông tin hóa đơn từ các trường nhập liệu vào DB
-            // (INSERT/UPDATE vào Invoices, Orders, OrderDetails)
+            DBConnection db = new DBConnection();
+            using (SqlConnection conn = db.GetConnection())
+            {
+                if (conn == null) return;
+
+                try
+                {
+                    conn.Open();
+                    // Nếu txtInvoiceID rỗng => Thêm mới, ngược lại là cập nhật
+                    if (string.IsNullOrEmpty(txtInvoiceID.Text))
+                    {
+                        // Thêm mới
+                        string insertQuery = @"INSERT INTO Invoices (InvoiceDate, TotalAmount, OrderID)
+                                       VALUES (@InvoiceDate, @TotalAmount, @OrderID)";
+                        using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@InvoiceDate", dtpInvoiceDate.Value);
+                            cmd.Parameters.AddWithValue("@TotalAmount", decimal.TryParse(txtInvoiceTotalAmount.Text, out decimal total) ? total : 0);
+                            cmd.Parameters.AddWithValue("@OrderID", cboOrderID.SelectedValue ?? (object)DBNull.Value);
+
+                            int result = cmd.ExecuteNonQuery();
+                            if (result > 0)
+                                MessageBox.Show("Thêm hóa đơn thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            else
+                                MessageBox.Show("Thêm hóa đơn thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    else
+                    {
+                        // Sửa hóa đơn
+                        string updateQuery = @"UPDATE Invoices SET InvoiceDate = @InvoiceDate, TotalAmount = @TotalAmount, OrderID = @OrderID
+                                       WHERE InvoiceID = @InvoiceID";
+                        using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@InvoiceDate", dtpInvoiceDate.Value);
+                            cmd.Parameters.AddWithValue("@TotalAmount", decimal.TryParse(txtInvoiceTotalAmount.Text, out decimal total) ? total : 0);
+                            cmd.Parameters.AddWithValue("@OrderID", cboOrderID.SelectedValue ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@InvoiceID", int.Parse(txtInvoiceID.Text));
+
+                            int result = cmd.ExecuteNonQuery();
+                            if (result > 0)
+                                MessageBox.Show("Cập nhật hóa đơn thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            else
+                                MessageBox.Show("Cập nhật hóa đơn thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    LoadInvoiceData();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lưu hóa đơn: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
@@ -273,8 +323,46 @@ namespace N4_BTCM
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Chức năng 'Tìm kiếm' đang được phát triển");
-            // Logic: Lọc dữ liệu trong dgvHoaDon dựa trên txtTimKiem
+            string keyword = textBox1.Text.Trim();
+            DBConnection db = new DBConnection();
+            using (SqlConnection conn = db.GetConnection())
+            {
+                if (conn == null) return;
+
+                try
+                {
+                    string query = @"
+                SELECT
+                    I.InvoiceID,
+                    I.InvoiceDate,
+                    I.TotalAmount AS InvoiceTotal,
+                    O.OrderID,
+                    C.FullName AS CustomerName,
+                    NV.FullName AS CreatedBy
+                FROM
+                    Invoices I
+                JOIN
+                    Orders O ON I.OrderID = O.OrderID
+                LEFT JOIN
+                    Users C ON O.CustomerID = C.UserID
+                LEFT JOIN
+                    Users NV ON O.CreatedBy = NV.UserID
+                WHERE
+                    C.FullName LIKE @Keyword
+                ORDER BY
+                    I.InvoiceDate DESC;";
+
+                    SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                    da.SelectCommand.Parameters.AddWithValue("@Keyword", "%" + keyword + "%");
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    dgvHoaDon.DataSource = dt;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tìm kiếm hóa đơn: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void btnAddDetail_Click(object sender, EventArgs e)

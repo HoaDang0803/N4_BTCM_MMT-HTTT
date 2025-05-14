@@ -100,110 +100,108 @@ namespace N4_BTCM
         private void LoadAndDisplayChartData()
         {
             DBConnection db = new DBConnection();
-            SqlConnection conn = db.GetConnection();
-
-            if (conn == null) return;
-
-            try
+            using (SqlConnection conn = db.GetConnection())
             {
-                conn.Open();
-                string selectedType = cboThongKeTheo.SelectedItem.ToString();
-                DateTime startDate = dtpTuNgay.Value;
-                DateTime endDate = dtpDenNgay.Value;
+                if (conn == null) return;
 
-                string groupByFormat = "";
-                string selectColumns = "";
-                string orderByColumn = "";
-                string titleSuffix = "";
-
-                // Xóa dữ liệu cũ
-                chartThongKe.Series["Doanh Thu"].Points.Clear();
-
-                switch (selectedType)
+                try
                 {
-                    case "Ngày":
-                        groupByFormat = "CAST(OrderDate AS DATE)";
-                        selectColumns = "CAST(OrderDate AS DATE) AS ThoiGian, SUM(TotalAmount) AS TongDoanhThu";
-                        orderByColumn = "ThoiGian ASC";
-                        titleSuffix = "theo Ngày";
-                        chartThongKe.ChartAreas["MainArea"].AxisX.LabelStyle.Format = "dd/MM";
-                        chartThongKe.ChartAreas["MainArea"].AxisX.IntervalType = DateTimeIntervalType.Days;
-                        chartThongKe.ChartAreas["MainArea"].AxisX.Interval = 1;
-                        break;
-                    case "Tháng":
-                        // Đảm bảo ngày bắt đầu/kết thúc là đầu/cuối tháng
-                        startDate = new DateTime(startDate.Year, startDate.Month, 1);
-                        endDate = new DateTime(endDate.Year, endDate.Month, DateTime.DaysInMonth(endDate.Year, endDate.Month));
-                        groupByFormat = "FORMAT(OrderDate, 'yyyy-MM')";
-                        selectColumns = "FORMAT(OrderDate, 'yyyy-MM') AS ThoiGian, SUM(TotalAmount) AS TongDoanhThu";
-                        orderByColumn = "ThoiGian ASC";
-                        titleSuffix = "theo Tháng";
-                        chartThongKe.ChartAreas["MainArea"].AxisX.LabelStyle.Format = "MM/yyyy";
-                        chartThongKe.ChartAreas["MainArea"].AxisX.IntervalType = DateTimeIntervalType.Months;
-                        chartThongKe.ChartAreas["MainArea"].AxisX.Interval = 1;
-                        break;
-                    case "Năm":
-                        // Đảm bảo ngày bắt đầu/kết thúc là đầu/cuối năm
-                        startDate = new DateTime(startDate.Year, 1, 1);
-                        endDate = new DateTime(endDate.Year, 12, 31);
-                        groupByFormat = "YEAR(OrderDate)";
-                        selectColumns = "YEAR(OrderDate) AS ThoiGian, SUM(TotalAmount) AS TongDoanhThu";
-                        orderByColumn = "ThoiGian ASC";
-                        titleSuffix = "theo Năm";
-                        chartThongKe.ChartAreas["MainArea"].AxisX.LabelStyle.Format = "yyyy";
-                        chartThongKe.ChartAreas["MainArea"].AxisX.IntervalType = DateTimeIntervalType.Years;
-                        chartThongKe.ChartAreas["MainArea"].AxisX.Interval = 1;
-                        break;
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
+
+                    string selectedType = cboThongKeTheo.SelectedItem.ToString();
+                    DateTime startDate = dtpTuNgay.Value;
+                    DateTime endDate = dtpDenNgay.Value;
+
+                    string groupByFormat = "";
+                    string selectColumns = "";
+                    string orderByColumn = "";
+                    string titleSuffix = "";
+
+                    // Xóa dữ liệu cũ
+                    chartThongKe.Series["Doanh Thu"].Points.Clear();
+
+                    switch (selectedType)
+                    {
+                        case "Ngày":
+                            groupByFormat = "CAST(OrderDate AS DATE)";
+                            selectColumns = "CAST(OrderDate AS DATE) AS ThoiGian, SUM(TotalAmount) AS TongDoanhThu";
+                            orderByColumn = "ThoiGian ASC";
+                            titleSuffix = "theo Ngày";
+                            chartThongKe.ChartAreas["MainArea"].AxisX.LabelStyle.Format = "dd/MM";
+                            chartThongKe.ChartAreas["MainArea"].AxisX.IntervalType = DateTimeIntervalType.Days;
+                            chartThongKe.ChartAreas["MainArea"].AxisX.Interval = 1;
+                            break;
+                        case "Tháng":
+                            startDate = new DateTime(startDate.Year, startDate.Month, 1);
+                            endDate = new DateTime(endDate.Year, endDate.Month, DateTime.DaysInMonth(endDate.Year, endDate.Month));
+                            groupByFormat = "FORMAT(OrderDate, 'yyyy-MM')";
+                            selectColumns = "FORMAT(OrderDate, 'yyyy-MM') AS ThoiGian, SUM(TotalAmount) AS TongDoanhThu";
+                            orderByColumn = "ThoiGian ASC";
+                            titleSuffix = "theo Tháng";
+                            chartThongKe.ChartAreas["MainArea"].AxisX.LabelStyle.Format = "MM/yyyy";
+                            chartThongKe.ChartAreas["MainArea"].AxisX.IntervalType = DateTimeIntervalType.Months;
+                            chartThongKe.ChartAreas["MainArea"].AxisX.Interval = 1;
+                            break;
+                        case "Năm":
+                            startDate = new DateTime(startDate.Year, 1, 1);
+                            endDate = new DateTime(endDate.Year, 12, 31);
+                            groupByFormat = "YEAR(OrderDate)";
+                            selectColumns = "YEAR(OrderDate) AS ThoiGian, SUM(TotalAmount) AS TongDoanhThu";
+                            orderByColumn = "ThoiGian ASC";
+                            titleSuffix = "theo Năm";
+                            chartThongKe.ChartAreas["MainArea"].AxisX.LabelStyle.Format = "yyyy";
+                            chartThongKe.ChartAreas["MainArea"].AxisX.IntervalType = DateTimeIntervalType.Years;
+                            chartThongKe.ChartAreas["MainArea"].AxisX.Interval = 1;
+                            break;
+                    }
+
+                    string query = $@"
+                SELECT
+                    {selectColumns}
+                FROM
+                    Orders
+                WHERE
+                    OrderDate >= @StartDate AND OrderDate <= @EndDate
+                GROUP BY
+                    {groupByFormat}
+                ORDER BY
+                    {orderByColumn};";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@StartDate", startDate);
+                        cmd.Parameters.AddWithValue("@EndDate", endDate);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                DateTime timePoint;
+                                if (selectedType == "Ngày")
+                                {
+                                    timePoint = reader.GetDateTime(reader.GetOrdinal("ThoiGian"));
+                                }
+                                else if (selectedType == "Tháng")
+                                {
+                                    timePoint = DateTime.ParseExact(reader["ThoiGian"].ToString(), "yyyy-MM", System.Globalization.CultureInfo.InvariantCulture);
+                                }
+                                else // Năm
+                                {
+                                    timePoint = new DateTime(Convert.ToInt32(reader["ThoiGian"]), 1, 1);
+                                }
+
+                                decimal doanhThu = reader.GetDecimal(reader.GetOrdinal("TongDoanhThu"));
+                                chartThongKe.Series["Doanh Thu"].Points.AddXY(timePoint, doanhThu);
+                            }
+                        }
+                    }
+                    chartThongKe.Titles[0].Text = $"BIỂU ĐỒ DOANH THU {titleSuffix}";
                 }
-
-                string query = $@"
-                    SELECT
-                        {selectColumns}
-                    FROM
-                        Orders
-                    WHERE
-                        OrderDate >= @StartDate AND OrderDate <= @EndDate
-                    GROUP BY
-                        {groupByFormat}
-                    ORDER BY
-                        {orderByColumn};";
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@StartDate", startDate);
-                cmd.Parameters.AddWithValue("@EndDate", endDate);
-
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                catch (Exception ex)
                 {
-                    DateTime timePoint;
-                    if (selectedType == "Ngày")
-                    {
-                        timePoint = reader.GetDateTime(reader.GetOrdinal("ThoiGian"));
-                    }
-                    else if (selectedType == "Tháng")
-                    {
-                        // Chuyển đổi chuỗi 'yyyy-MM' thành DateTime
-                        timePoint = DateTime.ParseExact(reader["ThoiGian"].ToString(), "yyyy-MM", System.Globalization.CultureInfo.InvariantCulture);
-                    }
-                    else // Năm
-                    {
-                        timePoint = new DateTime(Convert.ToInt32(reader["ThoiGian"]), 1, 1);
-                    }
-
-                    decimal doanhThu = reader.GetDecimal(reader.GetOrdinal("TongDoanhThu"));
-                    chartThongKe.Series["Doanh Thu"].Points.AddXY(timePoint, doanhThu);
+                    MessageBox.Show("Lỗi khi tải dữ liệu thống kê: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                reader.Close();
-                chartThongKe.Titles[0].Text = $"BIỂU ĐỒ DOANH THU {titleSuffix}";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi tải dữ liệu thống kê: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                if (conn.State == ConnectionState.Open) conn.Close();
             }
         }
     }
