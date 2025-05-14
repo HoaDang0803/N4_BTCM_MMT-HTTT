@@ -110,3 +110,41 @@ C:\Users\ADMIN\Source\Repos\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.csproj.Up
 C:\Users\ADMIN\Source\Repos\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.exe
 C:\Users\ADMIN\Source\Repos\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.pdb
 C:\Users\ADMIN\Source\Repos\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.UC_KhachHang.resources
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\N4_BTCM.exe.config
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\N4_BTCM.exe
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\N4_BTCM.pdb
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\EPPlus.dll
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\EPPlus.Interfaces.dll
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\Microsoft.IO.RecyclableMemoryStream.dll
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\Microsoft.WindowsAPICodePack.dll
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\System.Buffers.dll
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\System.ComponentModel.Annotations.dll
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\System.Memory.dll
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\System.Numerics.Vectors.dll
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\System.Security.Cryptography.Xml.dll
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\EPPlus.xml
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\Microsoft.IO.RecyclableMemoryStream.xml
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\Microsoft.WindowsAPICodePack.xml
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\System.Buffers.xml
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\System.Memory.xml
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\System.Numerics.Vectors.xml
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\bin\Debug\System.Security.Cryptography.Xml.xml
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.csproj.AssemblyReference.cache
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.Login.resources
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.MainMenu.resources
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.Properties.Resources.resources
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.Register.resources
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.UCQuanLyHoaDon.resources
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.UCQuanLyKhachHang.resources
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.UCQuanLyLoaiThuoc.resources
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.UCQuanLyNhanVien.resources
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.UCQuanLyThuoc.resources
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.UCThongKe.resources
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.UC_KhachHang.resources
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.csproj.GenerateResource.cache
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.csproj.CoreCompileInputs.cache
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.csproj.Up2Date
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.exe
+E:\hoc tap\N4_BTCM_MMT-HTTT\N4_BTCM\obj\Debug\N4_BTCM.pdb
